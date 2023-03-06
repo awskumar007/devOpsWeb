@@ -1,14 +1,18 @@
 pipeline {
     agent any
+    environment{
+        PATH = "/opt/maven/bin:$PATH"
+    }
     
     tools {
-        maven 'local_maven'
+        maven 'maven'
     }
-    parameters {
-         string(name: 'staging_server', defaultValue: '13.232.37.20', description: 'Remote Staging Server')
-    }
-
-stages{
+    stages{
+        stage('clone'){
+            steps{
+            git credentialsId: 'git-creds', url: 'https://github.com/awskumar007/devOpsWeb'
+           }
+        }
         stage('Build'){
             steps {
                 sh 'mvn clean package'
@@ -21,13 +25,9 @@ stages{
             }
         }
 
-        stage ('Deployments'){
-            parallel{
-                stage ("Deploy to Staging"){
-                    steps {
-                        sh "scp -v -o StrictHostKeyChecking=no **/*.war root@${params.staging_server}:/opt/tomcat/webapps/"
-                    }
-                }
+        stage ('Deploy2tomcat'){
+        steps {
+            deploy adapters: [tomcat9(credentialsId: 'tomcat-deployer', path: '', url: 'http://3.110.212.6:8080/')], contextPath: null, war: '**/*.war'
             }
         }
     }
