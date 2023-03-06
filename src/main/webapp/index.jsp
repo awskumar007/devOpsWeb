@@ -1,4 +1,4 @@
-<%@ page session="false"%>
+<%@ page session="true"%>
 <%
 response.sendRedirect("hello,Welcome to LTIMindtree");
 %>
