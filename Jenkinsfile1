@@ -4,8 +4,7 @@ pipeline {
     tools {
         maven 'maven'
     }
-    
-    stages{
+   stages{
         stage ('Build'){
             steps {
                 sh 'mvn clean package'
@@ -36,5 +35,6 @@ pipeline {
                 repository: 'repository/testapp-release', 
                 version: '1.0.0'
           }
-     }
+        }
+    }
 }
