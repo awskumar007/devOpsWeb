@@ -12,23 +12,14 @@ pipeline {
         }
         stage ('upload2nexus'){
             steps {
-               nexusArtifactUploader artifacts: 
-                      [
-                   [
-                   artifactId: 'devOpsWeb', 
-                   classifier: '', 
-                   file: 'target/devOpsWeb-1.0.0.war', 
-                   type: 'war'
-                   ]
-                ], 
-                credentialsId: 'nexus3', 
-                groupId: 'com.ranjitswain', 
-                nexusUrl: '172.31.9.125:8081', 
-                nexusVersion: 'nexus3', 
-                protocol: 'http', 
-                repository: 'repository/testapp-release', 
-                version: '1.0.0'
-          }
+                 script {
+                     def pom = readMavenPom file: 'pom.xml'
+                     nexusArtifactUploader artifacts: [[artifactId: "${pom.artifactId}", classifier: '', file: "target/${pom.artifactId}-${pom.version}.${pom.packaging}", 
+                     type: "${pom.packaging}"]], credentialsId: 'nexus3', groupId: "${pom.groupId}", nexusUrl: '172.31.9.125:8081', nexusVersion: 'nexus3', protocol: 'http', 
+                     repository: 'repository/testapp-release', 
+                     version: "${pom.version}"
+                 }
+            }
         }
     }
 }
