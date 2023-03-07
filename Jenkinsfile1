@@ -17,7 +17,7 @@ pipeline {
                    [
                    artifactId: 'devOpsWeb', 
                    classifier: '', 
-                   file: 'target/customproject-1.0.0.war', 
+                   file: 'target/devOpsWeb-1.0.0.war', 
                    type: 'war'
                    ]
                 ], 
