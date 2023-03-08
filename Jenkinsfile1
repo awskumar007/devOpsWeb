@@ -13,7 +13,8 @@ pipeline {
         stage ('upload2nexus'){
             steps {
                  script {
-                     def pom = readMavenPomfile: 'pom.xml'
+                     def pom = readMavenPomfile:'pom.xml'
+                     }
                      nexusArtifactUploader artifacts: [[artifactId: "${pom.artifactId}", classifier: '', file: "target/${pom.artifactId}-${pom.version}.${pom.packaging}", 
                      type: "${pom.packaging}"]], credentialsId: 'nexus3', groupId: "${pom.groupId}", nexusUrl: '172.31.9.125:8081', nexusVersion: 'nexus3', protocol: 'http', 
                      repository: 'repository/testapp-release', 
