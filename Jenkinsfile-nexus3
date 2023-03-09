@@ -1,0 +1,38 @@
+pipeline {
+    agent any
+    
+    tools {
+        maven 'maven'
+    }
+   stages{
+        stage(clone){
+            steps{
+                git changelog: false, credentialsId: 'git-creds', url: 'https://github.com/awskumar007/devOpsWeb.git'
+            }
+        }
+        stage ('Build'){
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+        stage ('upload2nexus'){
+            steps {
+                nexusArtifactUploader artifacts: [
+                    [
+                        artifactId: 'devOpsWeb',
+                        classifier: '',
+                        file: 'target/devOpsWeb.war',
+                        type: 'war'
+                    ]
+                ],
+                credentialsId: 'nexus3',
+                groupId: 'com.ranjitswain',
+                nexusUrl:'3.111.37.232:8081',
+                nexusVersion: 'nexus3',
+                protocol: 'http',
+                repository: 'testapp-release',
+                version: '1.0.3'
+            }
+        }
+    }
+}
