@@ -5,6 +5,11 @@ pipeline {
         maven 'maven'
     }
    stages{
+        stage(clone){
+            steps{
+                git changelog: false, credentialsId: 'git-creds', url: 'https://github.com/awskumar007/devOpsWeb.git'
+            }
+        }
         stage ('Build'){
             steps {
                 sh 'mvn clean package'
@@ -12,24 +17,32 @@ pipeline {
         }
         stage ('upload2nexus'){
             steps {
-                 script {
-                    def pom = readMavenPom file: 'pom.xml'
-                    nexusArtifactUploader artifacts: 
-                        [	
-                            [
-                                artifactId: "${pom.artifactId}", 
-                                classifier: '', 
-                                file: "target/${pom.artifactId}-${pom.version}.${pom.packaging}", 
-                                            type: "${pom.packaging}"
-                            ]
-                        ], 	
-                                credentialsId: 'nexus3', 
-                                groupId: "${pom.groupId}", 
-                                nexusUrl: '172.31.9.125:8081', 
-                                nexusVersion: 'nexus3', protocol: 'http', 
-                                            repository: 'repository/testapp-release', 
-                                            version: "${pom.version}"
-                 }
+                nexusArtifactUploader artifacts: [
+                    [
+                        artifactId: 'devOpsWeb',
+                        classifier: '',
+                        file: 'target/devOpsWeb.war',
+                        type: 'war'
+                    ]
+                ],
+                credentialsId: 'nexus3',
+                groupId: 'com.ranjitswain',
+                nexusUrl:'13.233.49.176:8081',
+                nexusVersion: 'nexus3',
+                protocol: 'http',
+                repository: 'testapp-release',
+                version: '1.0.3'
+            }
+        }
+	stage ('Pull artifact from Nexus'){
+            steps {
+                sh 'wget --user=adminsword=admin@123 http://13.233.49.176:8081/repository/testapp-release/com/ranjitswain/devOpsWeb/1.0.3/devOpsWeb-1.0.3.war'
+                sh 'mv devOpsWeb-1.0.3.war devOpsWeb.war'
+            }
+        }
+        stage ('Deploy to tomcat server'){         
+            steps {
+                deploy adapters: [tomcat9(credentialsId: 'tomcat-deployer', path: '', url: 'http://52.66.210.88:8080/')], contextPath: 'devOpsWeb', war: 'devOpsWeb.war'
             }
         }
     }
