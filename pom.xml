@@ -16,6 +16,8 @@
         <jsf-ri.version>1.2_15</jsf-ri.version>        
         <maven.jetty.plugin.version>6.1.22</maven.jetty.plugin.version>
         <log4j.version>1.2.13</log4j.version>
+	<sonar.host.url>https://sonarcloud.io/</sonar.host.url>
+	<sonar.login>b46ae932bba04a6153cd9de2d124f9a250af3736</sonar.login>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     	<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
