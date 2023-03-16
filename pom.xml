@@ -7,7 +7,7 @@
     <groupId>com.ranjitswain</groupId>
     <artifactId>devOpsWeb</artifactId>
     <packaging>war</packaging>
-    <version>1.0.5</version>
+    <version>1.1.5</version>
     <name>A custom project using myfaces 1.2 and facelets</name>
     <url>http://www.myorganization.org</url>
 
