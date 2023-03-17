@@ -9,12 +9,12 @@ pipeline {
                 git changelog: false, credentialsId: 'git-creds', url: 'https://github.com/awskumar007/devOpsWeb.git'
             	}
         }
-        stage ('Build'){
+        stage('Build'){
             steps {
                 sh 'mvn clean package'
             	}
         }
-        stage ('upload2nexus'){
+        stage('upload2nexus'){
             steps {
                 nexusArtifactUploader artifacts: [
                     [
@@ -30,16 +30,16 @@ pipeline {
                 nexusVersion: 'nexus3',
                 protocol: 'http',
                 repository: 'testapp-release',
-                version: '1.0.4'
+                version: '1.0.3'
             }
         }
-	stage ('Pull artifact from Nexus'){
+	stage('Pull artifact from Nexus'){
             steps {
-                sh 'wget --user=admin --password=admin@123 http://13.233.49.176:8081/repository/testapp-release/com/ranjitswain/devOpsWeb/1.0.4/devOpsWeb-1.0.4.war'
-                sh 'mv devOpsWeb-1.0.4.war devOpsWeb.war'
+                sh 'wget --user=admin --password=admin@123 http://13.233.49.176:8081/repository/testapp-release/com/ranjitswain/devOpsWeb/1.0.3/devOpsWeb-1.0.3.war'
+                sh 'mv devOpsWeb-1.0.3.war devOpsWeb.war'
             }
         }
-        stage ('Deploy to tomcat-webserver'){         
+        stage('Deploy to tomcat-webserver'){         
             steps{
                 echo "Deploying ...."
                 sshPublisher(publishers:
