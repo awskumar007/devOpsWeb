@@ -1,19 +1,18 @@
 pipeline {
-    agent any
-    
-    tools {
-        maven 'maven'
-    }
+    agent any	    
+    	tools {
+        	maven 'maven'
+    	      }
    stages{
-        stage(clone){
+        stage('clone'){
             steps{
                 git changelog: false, credentialsId: 'git-creds', url: 'https://github.com/awskumar007/devOpsWeb.git'
-            }
+            	}
         }
         stage ('Build'){
             steps {
                 sh 'mvn clean package'
-            }
+            	}
         }
         stage ('upload2nexus'){
             steps {
